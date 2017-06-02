@@ -19,6 +19,7 @@ public:
 	void setSoldiersRandom();
 	void run();
 	bool movementValidation(GameMove& gameMove, Soldier* sol);
+	void soliderMovementOnBoard(int from_x, int from_y, int to_x ,int to_y);
 	void move(GameMove& gameMove, int gamerNum);
 	bool attack(int currSoldierNum, int enemyNum, int _x, int _y);
 	bool oneIsAttack(int _x, int _y);
@@ -28,4 +29,5 @@ public:
 	bool eightIsAttack(int enemyNum, int _x, int _y);
 	bool nineIsAttack(int enemyNum, int _x, int _y);
 	void win(int gamerNum);
+	void updateDeadSoliderCounter(int gamerNum, bool win);
 };
