@@ -229,18 +229,41 @@ void GameManager::move(GameMove& gameMove, int gamerNum)
 	else if (board[gameMove.to_x][gameMove.to_y].soldier != nullptr)
 	{
 		Win = attack(board[gameMove.from_x][gameMove.from_y].soldier->soldierNum, board[gameMove.to_x][gameMove.to_y].soldier->soldierNum, gameMove.to_x, gameMove.to_y);
-		if (Win)
+		if (Win) {
+			delete(board[gameMove.to_x][gameMove.to_y].soldier);
+			soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
 			win(gamerNum);
+			updateDeadSoliderCounter(gamerNum, win);
+		}
+		else {
+			delete(board[gameMove.from_x][gameMove.from_y].soldier);
+			board[gameMove.from_x][gameMove.from_y].soldier = nullptr;
+			updateDeadSoliderCounter(gamerNum, !win);
+		}
 	}
 	else
 	{
-		board[gameMove.from_x][gameMove.from_y].soldier->move(gameMove.to_x,gameMove.to_y);
-		board[gameMove.to_x][gameMove.to_y].soldier = board[gameMove.from_x][gameMove.from_y].soldier;
-		board[gameMove.from_x][gameMove.from_y].soldier = nullptr;
+		soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
 	}
 		
 }
 
+void GameManager::soliderMovementOnBoard(int from_x,int from_y,int to_x ,int to_y) {
+	board[from_x][from_y].soldier->move(to_x, to_y);
+	board[to_x][to_y].soldier = board[from_x][from_y].soldier;
+	board[from_x][from_y].soldier = nullptr;
+}
+
+void GameManager::updateDeadSoliderCounter(int gamerNum,bool win) {
+	if (gamerNum == (int)GamerA::GamerA && win)
+		soldierDeadPlayer2++;
+	if (gamerNum == (int)GamerA::GamerA && !win)
+		soldierDeadPlayer1++;
+	if (gamerNum == (int)GamerB::GamerB && win)
+		soldierDeadPlayer1++;
+	if (gamerNum == (int)GamerB::GamerB && !win)
+		soldierDeadPlayer2++;
+}
 
 bool GameManager::attack(int currSoldierNum,int enemyNum, int _x, int _y) {
 	switch (currSoldierNum) {
