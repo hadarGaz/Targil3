@@ -1,6 +1,102 @@
 #include "GameManager.h"
 
-void GameManager::setBoard()
+void GameManager::paramMenager()
+{
+	char* tempPath;
+	if (path == "NULL") //it mean current directory
+	{
+		openFolder("cd");
+		size_t size = path.find_last_of("\n");
+		path[size] = '\0';
+	}
+
+	char str[4095] = "2>NUL dir /a-d /b ";
+	tempPath = strcat(str, path.c_str());
+	openFolder(tempPath);
+
+	currFileBoard = boardFile.begin();
+
+	while (GameOver == false)
+	{
+		setBoard();
+		if (GameOver == false)
+		{
+			init();
+			run();
+			Sleep(50 * delay);
+		}
+
+	}
+	endMessage();
+}
+
+void GameManager::openFolder(char* tempPath)
+{
+	char buffer[4096];
+	FILE* fp = _popen(tempPath, "r");
+	while (fgets(buffer, 4095, fp))
+	{
+		if (path == "NULL")
+			path = buffer; //new 13.5
+		else
+			divideToFile(buffer);
+	}
+	_pclose(fp);
+}
+
+
+void GameManager::divideToFile(char *buffer)
+{
+	string fileName;
+	int i = 0;
+	while (strncmp(buffer + i, ".", 1) != 0) //פונקציה שבודקת את הסיומת
+		i++;
+
+	char* str = &buffer[i + 1];
+	if (strncmp(str, "gboard", 6) == 0)
+		boardFile[buffer]++;
+}
+
+void GameManager::commandLine(int argc, char* argv[])
+{
+	for (int i = 1; i < argc; i = i + 2)
+	{
+		if (strcmp(argv[i], "-board") == 0)
+		{
+			if (strcmp(argv[i + 1], "f") == 0)
+				ifBoardFile = true;
+		}
+		
+		else if (strcmp(argv[i], "-path") == 0)
+		{
+			path = argv[i + 1];
+		}
+		else if (strcmp(argv[i], "-quiet") == 0)
+		{
+			if (ifBoardFile == true)
+				quietMode = true;
+			i--; // beacuse there is no parameter after quite
+		}
+		else if (strcmp(argv[i], "-delay") == 0)
+		{
+			if (quietMode == false)
+				delay = *argv[i + 1];
+		}
+	}
+	paramMenager();
+
+}
+
+void GameManager::setBoard() //סידור לוח וחיילים
+{
+	//clearTheGame(); //צריך למחוק את החיילים מהמשחק הקודם
+	if (ifBoardFile == true)
+		uploadBoardFromFile();
+	else
+		setRandomBoard();
+}
+
+void GameManager::setRandomBoard()
 {
 	board[1][7].setCellType((int)Type::fr);
 	board[1][8].setCellType((int)Type::fr);
@@ -34,13 +130,51 @@ void GameManager::setBoard()
 
 }
 
+void GameManager::uploadBoardFromFile() //אתחולים
+{
+	bool isBoardOk = false;
+
+	if (currFileBoard == boardFile.end())
+		GameOver = true;
+	
+	else
+	{
+		ifstream fileNameforBoard = openfile(currFileBoard);
+		setBoardFromFile(fileNameforBoard);
+		isBoardOk = printAndCheckBoardFromFileErrors(currFileBoard->first);
+		if (isBoardOk == false)
+		{
+			GameOver = true;
+		}
+	}
+}
+
+
+ifstream GameManager::openfile(map<string, int>::iterator file)
+{
+	
+	const char* tempPath = path.c_str();
+	string fullPath = tempPath;
+	fullPath.append("\\");
+	fullPath.append(file->first);
+	size_t indexstr1 = fullPath.find_last_of("\n");
+	fullPath[indexstr1] = '\0';
+	ifstream boardFile(fullPath);
+	bool ok = boardFile.is_open();
+	return boardFile;
+}
+
 void GameManager::init()
 {
 	//clear the board from soldier
 	//init soldier place
-	setSoldiersRandom();
+	if(!ifBoardFile)
+		setSoldiersRandom();
 	soldierDeadPlayer1 = 0;
 	soldierDeadPlayer2 = 0;
+	SetACounter = 0, SetBCounter = 0;
+	setSol1 = 0, setSol2 = 0, setSol3 = 0, setSol7 = 0, setSol8 = 0, setSol9 = 0;
+	wrongCharsSet.clear();
 	//gamers[0]->init(pboard);
 }
 void GameManager::setSoldiersRandom()
@@ -68,6 +202,7 @@ void GameManager::run()
 {
 	int win = 0;
 	GameMove tempGameMove2(0, 0, 0, 0);
+
 	while (!win)
 	{
 		GameMove tempGameMove1 = gamers[0]->play(tempGameMove2);
@@ -83,6 +218,8 @@ void GameManager::run()
 		//if valid sol.mvoe
 		GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
 	}
+	if(ifBoardFile)
+		currFileBoard++;
 }
 void GameManager::move(GameMove& gameMove, int gamerNum)
 {
@@ -247,4 +384,110 @@ void GameManager::win(int gamerNum)
 	else
 		scorePlayer2++;
 
+}
+
+void GameManager::setBoardFromFile(ifstream& inFile) {
+	string line;
+	char currentChar;
+	std::map<char, int> wrongCharMap;
+
+	for (int i = 1; i < (int)Sizes::size; i++) {
+		getline(inFile, line);
+		for (int j = 1; j < (int)Sizes::size; j++) {
+			currentChar = line.at(j - 1);
+			if (currentChar == 'T') {
+				board[j][i].setCellType((int)Type::fr);
+			}
+			else if (currentChar == 'S') {
+				board[j][i].setCellType((int)Type::sea);
+			}
+			else if (currentChar == 'A') {
+				if (SetACounter == 0) {
+					board[j][i].setCellType((int)Type::flagA);
+				}
+				SetACounter++;
+			}
+			else if (currentChar == 'B') {
+				if (SetBCounter == 0) {
+					board[j][i].setCellType((int)Type::flagB);
+				}
+				SetBCounter++;
+			}
+			else if ((currentChar - '0' >= (int)GamerA::soldier1) && (currentChar - '0' <= (int)GamerA::soldier3)) {
+				updateSetSoliderCounter(currentChar - '0');
+				if (setSol1 <= 1 || setSol2 <= 1 || setSol3 <= 1)
+				{
+					board[j][i].soldier->setCondition(currentChar - '0');
+					board[j][i].soldier->set(j,i, currentChar - '0');
+				}
+				
+			}
+			else if (currentChar - '0' >= (int)GamerB::soldier7 && currentChar - '0' <= (int)GamerB::soldier9) {
+				updateSetSoliderCounter(currentChar - '0');
+				if (setSol7 <= 1 || setSol8 <= 1 || setSol9 <= 1)
+				{
+					board[j][i].soldier->setCondition(currentChar - '0');
+					board[j][i].soldier->set(j, i, currentChar - '0');
+				}
+			}
+			else {
+				if (currentChar != ' ') {
+					if (wrongCharMap.count(currentChar) != 0) {//if the char exists
+						wrongCharMap[currentChar]++;
+					}
+					else {
+						wrongCharsSet.push_back(currentChar);
+						wrongCharMap[currentChar]++;
+					}
+				}
+			}
+		}
+	}
+
+}
+
+void GameManager::updateSetSoliderCounter(int solider) {
+	if (solider == (int)GamerA::soldier1) {
+		setSol1++;
+	}
+	if (solider == (int)GamerA::soldier2) {
+		setSol2++;
+	}
+	if (solider == (int)GamerA::soldier3) {
+		setSol3++;
+	}
+	if (solider == (int)GamerB::soldier7) {
+		setSol7++;
+	}
+	if (solider == (int)GamerB::soldier8) {
+		setSol8++;
+	}
+	if (solider == (int)GamerB::soldier9) {
+		setSol9++;
+	}
+}
+
+bool GameManager::printAndCheckBoardFromFileErrors(string fileName) const {
+	bool isBoardOk = true;
+	if (SetACounter != 1 || setSol1 != 1 || setSol2 != 1 || setSol3 != 1) {
+		cout << "Wrong settings for player A tools in file " << fileName << endl;
+		isBoardOk = false;
+	}
+	if (SetBCounter != 1 || setSol7 != 1 || setSol8 != 1 || setSol9 != 1) {
+		cout << "Wrong settings for player B tools in file " << fileName << endl;
+		isBoardOk = false;
+	}
+	if (wrongCharsSet.size() > 0) {
+		cout << "Wrong character on board : " << wrongCharsSet << " in file " << fileName << endl;
+		isBoardOk = false;
+	}
+	return isBoardOk;
+}
+
+void GameManager::endMessage() const
+{
+	clearScreen();
+	cout << "Game Summary" << endl;
+	cout << "A points - " << scorePlayer1 << endl;
+	cout << "B points - " << scorePlayer2 << endl;
 }
