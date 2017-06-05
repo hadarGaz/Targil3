@@ -9,27 +9,7 @@ void AlgoPalyer::init(const BoardData& board) //get pboard
 	for (int y = 0; y < (int)Sizes::size; y++) {
 		for (int x = 0; x < (int)Sizes::size; x++) {
 			char curr = pboardData->charAt(x, y);
-			boardOfChar[y][x] = curr;
-			if (curr == '1' || curr == '7') {
-				tools[0].set(x, y, curr);
-				tools[0].setCondition(curr);
-			}
-			if (curr == '2' || curr == '8') {
-				tools[1].set(x, y, curr);
-				tools[1].setCondition(curr);
-			}
-			if (curr == '3' || curr == '9') {
-				tools[2].set(x, y, curr);
-				tools[2].setCondition(curr);
-			}
-			if (numOfPlayer == (int)GamerA::GamerA || curr == 'B') {
-				enemyFlag[0] = x;
-				enemyFlag[1] = y;
-			}
-			if (numOfPlayer == (int)GamerB::GamerB || curr == 'A') {
-				enemyFlag[0] = x;
-				enemyFlag[1] = y;
-			}
+			updateBoardAndTools(curr, x, y);
 		}
 	}
 
@@ -59,4 +39,65 @@ int AlgoPalyer::convertCharToInt(char x)
 int AlgoPalyer::calcNewSol()
 {
 	return 0;
+}
+
+void AlgoPalyer::updateBoardAndTools(char curr, int x, int y) {
+	if (curr == '1' || curr == '7') {
+		tools[0].set(x, y, curr);
+		tools[0].setCondition(curr);
+		if (curr == '1') {
+			copyBoard[x][y].setGamerType((int)GamerA::soldier1);
+		}
+		else {
+			copyBoard[x][y].setGamerType((int)GamerB::soldier7);
+		}
+	}
+	if (curr == '2' || curr == '8') {
+		tools[1].set(x, y, curr);
+		tools[1].setCondition(curr);
+		if (curr == '2') {
+			copyBoard[x][y].setGamerType((int)GamerA::soldier2);
+		}
+		else {
+			copyBoard[x][y].setGamerType((int)GamerB::soldier8);
+		}
+	}
+	if (curr == '3' || curr == '9') {
+		tools[2].set(x, y, curr);
+		tools[2].setCondition(curr);
+		if (curr == '3') {
+			copyBoard[x][y].setGamerType((int)GamerA::soldier3);
+		}
+		else {
+			copyBoard[x][y].setGamerType((int)GamerB::soldier9);
+		}
+	}
+	if (curr == 'B') {
+		copyBoard[x][y].setCellType = (int)Type::flagB;
+		if (numOfPlayer == (int)GamerA::GamerA) {
+			enemyFlag[0] = x;
+			enemyFlag[1] = y;
+		}
+	}
+	if (curr == 'A') {
+		copyBoard[x][y].setCellType = (int)Type::flagA;
+		if (numOfPlayer == (int)GamerB::GamerB) {
+			enemyFlag[0] = x;
+			enemyFlag[1] = y;
+		}
+	}
+	if (curr == 'S') {
+		copyBoard[x][y].setCellType = (int)Type::sea;
+	}
+	if (curr == 'F') {
+		copyBoard[x][y].setCellType = (int)Type::fr;
+	}
+	if (curr == '#') {
+		if (numOfPlayer == (int)GamerB::GamerB) {
+			copyBoard[x][y].setGamerType = (int)GamerA::GamerA;
+		}
+		else {
+			copyBoard[x][y].setGamerType = (int)GamerB::GamerB;
+		}
+	}
 }
