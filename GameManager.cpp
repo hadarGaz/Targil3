@@ -174,9 +174,10 @@ void GameManager::init()
 	SetACounter = 0, SetBCounter = 0;
 	setSol1 = 0, setSol2 = 0, setSol3 = 0, setSol7 = 0, setSol8 = 0, setSol9 = 0;
 	wrongCharsSet.clear();
-	mainPboard.setAdressToBoard(board);
-	gamers[0]->init(mainPboard);
-	gamers[1]->init(mainPboard);
+	PBoardForPlayer1.setPointerAndNumOfGamer(board,1);
+	PBoardForPlayer2.setPointerAndNumOfGamer(board,2);
+	gamers[0]->init(PBoardForPlayer1);
+	gamers[1]->init(PBoardForPlayer2);
 	//gamers[0]->init(pboard);
 	if (!quietMode)
 		printing();

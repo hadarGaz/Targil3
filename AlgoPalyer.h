@@ -2,10 +2,12 @@
 #include "AbstractPlayer.h"
 #include <string>
 #include "BoardData.h"
+#include "Soldier.h"
 class AlgoPalyer : public AbstractPlayer {
 	enum { rows = 13, cols = 13 };
 	const BoardData* pboardData;
 	char boardOfChar[rows][cols];
+	Soldier tools[3];
 public:
 	virtual void setPlayer(int player)
 	{
