@@ -2,18 +2,19 @@
 #include "BoardData.h"
 #include "Cell.h"
 class PBoard : public BoardData {
-	Cell **pBoard[14];
+	Cell (*pBoard)[14];
 public:
 	PBoard () {}
 	virtual char charAt(int x, int y) const
 	{
-		int i = 0;
-		//(*pBoard)[1][2].
-		return 'a';
+		//סתם ניסיתי לראות שזה עובד
+		int ch = (pBoard)[x][y].returnedCellType();
+		if (ch == 0)
+			return 'h';
 	}
-	void setAdressToBoard(Cell* _pboard[][14])
+	void setAdressToBoard(Cell _pboard[14][14])
 	{
-		//*pBoard = _pboard;
-	
+		pBoard = _pboard;
+		//(pBoard)[1][1].setCellType(2);
 	}
 };
