@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 class BoardData {
 public:
 	enum{rows = 13, cols = 13};

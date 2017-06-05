@@ -25,7 +25,6 @@ void GameManager::paramMenager()
 			run();
 			Sleep(50 * delay);
 		}
-
 	}
 	endMessage();
 }
@@ -175,26 +174,36 @@ void GameManager::init()
 	SetACounter = 0, SetBCounter = 0;
 	setSol1 = 0, setSol2 = 0, setSol3 = 0, setSol7 = 0, setSol8 = 0, setSol9 = 0;
 	wrongCharsSet.clear();
+	mainPboard.setAdressToBoard(&board);
+	gamers[0]->init(mainPboard);
+	gamers[1]->init(mainPboard);
 	//gamers[0]->init(pboard);
+	if (!quietMode)
+		printing();
 }
 void GameManager::setSoldiersRandom()
 {
 	int x = 0, y = 0, found = 0;
+	int j = 1;
 	for (int i = 1; i <= 6; i++) {
+		found = 0;
 		while (!found)
 		{
 			x = (rand() % 13) + 1;
-			if (i >= 3)
+			if (i > 3)
 				y = rand() % 5 + 9;
 			else
 				y = (rand() % 5) + 1;
 			if ((board[x][y]).isCellEmpty())
 				found = 1;
 		}
+		if (j == 4)
+			j = j + 3;
 		(board[x][y]).soldier = new Soldier;
 		(board[x][y]).soldier->isAlive = true;
-		(board[x][y]).soldier->setCondition(i);
-		(board[x][y]).soldier->set(x, y, i);
+		(board[x][y]).soldier->setCondition(j);
+		(board[x][y]).soldier->set(x, y, j);
+		j++;
 	}
 }
 
@@ -206,17 +215,13 @@ void GameManager::run()
 	while (!win)
 	{
 		GameMove tempGameMove1 = gamers[0]->play(tempGameMove2);
-		if (board[tempGameMove1.from_x][tempGameMove1.from_y].soldier->isAlive == true) //need to check if relavent 
-		{
-			if (movementValidation(tempGameMove1,board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
-			{
+		if (movementValidation(tempGameMove1,board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
 				move(tempGameMove1,1);
-			}
+			
 
-		}
-		//check move
-		//if valid sol.mvoe
 		GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
+		if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier));
+		move(tempGameMove2, 2);
 	}
 	if(ifBoardFile)
 		currFileBoard++;
@@ -224,7 +229,7 @@ void GameManager::run()
 void GameManager::move(GameMove& gameMove, int gamerNum)
 {
 	bool Win = false;
-	if (board[gameMove.to_x][gameMove.to_y].returnedCellType > 2)
+	if (board[gameMove.to_x][gameMove.to_y].returnedCellType() > 2)
 		win(gamerNum);
 	else if (board[gameMove.to_x][gameMove.to_y].soldier != nullptr)
 	{
@@ -233,12 +238,12 @@ void GameManager::move(GameMove& gameMove, int gamerNum)
 			delete(board[gameMove.to_x][gameMove.to_y].soldier);
 			soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
 			win(gamerNum);
-			updateDeadSoliderCounter(gamerNum, win);
+			updateDeadSoliderCounter(gamerNum, Win);
 		}
 		else {
 			delete(board[gameMove.from_x][gameMove.from_y].soldier);
 			board[gameMove.from_x][gameMove.from_y].soldier = nullptr;
-			updateDeadSoliderCounter(gamerNum, !win);
+			updateDeadSoliderCounter(gamerNum, !Win);
 		}
 	}
 	else
@@ -312,7 +317,7 @@ bool GameManager::movementValidation(GameMove& gameMove, Soldier* sol)
 		int typeReturnd = (board[to_x][to_y]).returnedCellType();
 		if (typeReturnd == (int)Type::emptyType) //its soldier
 		{
-			if (sol->gamerNum == (board[to_x][to_y]).returndGamer())
+			if (sol->gamerNum == (board[to_x][to_y]).soldier->gamerNum)
 				return false;
 			else
 				return true;
@@ -513,4 +518,95 @@ void GameManager::endMessage() const
 	cout << "Game Summary" << endl;
 	cout << "A points - " << scorePlayer1 << endl;
 	cout << "B points - " << scorePlayer2 << endl;
+}
+
+void GameManager::printBoard() const
+{
+	char flag = 167;
+	int typeofcell;
+	int num = 1;
+	printLetters();
+	printEndLine();
+	for (int i = 1; i < (int)Sizes::size; i++) {
+		for (int j = 0; j < (int)Sizes::size; j++) {
+			cout << "|";
+			if (j == 0)
+				printNumber(num++);
+			else {
+				typeofcell = board[j][i].returnedCellType();
+				if (typeofcell == (int)Type::emptyType) {
+					cout << "   ";
+				}
+				else if (typeofcell == (int)Type::fr) {
+					setTextColor(BLACK, PURPLE);
+					cout << "FR ";
+					setTextColor(WHITE);
+				}
+				else if (typeofcell == (int)Type::sea) {
+					setTextColor(BLACK, YELLOW);
+					cout << "SEA";
+					setTextColor(WHITE);
+				}
+				else if (typeofcell == (int)Type::flagA) {
+					cout << " " << flag << "A";
+				}
+				else {
+					cout << " " << flag << "B";
+				}
+			}
+		}
+		cout << "|" << endl;
+		printEndLine();
+	}
+	cout << "SCORE: " << endl;
+	for (int i = 0; i < (int)Sizes::sizeOfGamers; i++) {
+		//cout << "Gamer: " << gamers[i].name;
+		//cout << " = " << gamers[i].score << endl;
+	}
+
+}
+
+void GameManager::printLetters() const
+{
+	char ch = 'A';
+	cout << "|" << "   ";
+	for (int p = 1; p<(int)Sizes::size; p++)
+		cout << "| " << ch++ << " ";
+	cout << "|" << endl;
+}
+
+void GameManager::printEndLine()const
+{
+	for (int l = 0; l < (int)Sizes::size; l++)
+		cout << "====";
+	cout << endl;
+}
+
+
+void GameManager::printNumber(int num) const
+{
+
+	if (num >= 10)
+		cout << " " << num;
+	else
+		cout << " " << num << " ";
+}
+
+void GameManager::printing() const
+{
+	clearScreen();
+	printBoard();
+	drowSoldiers();
+}
+
+void GameManager::drowSoldiers() const
+{
+	for (int i = 0; i < (int)Sizes::size; i++)
+	{
+		for (int j = 0; j < (int)Sizes::size; j++)
+		{
+			if (board[i][j].soldier != nullptr)
+				board[i][j].soldier->draw();
+		}
+	}
 }
