@@ -7,6 +7,7 @@
 #include "GameMove.h"
 #include <map>
 #include "PBoard.h"
+#include <iostream>
 #define _CRT_SECURE_NO_WARNINGS
 
 class GameManager {
