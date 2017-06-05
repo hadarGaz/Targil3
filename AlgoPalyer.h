@@ -20,6 +20,7 @@ public:
 	virtual string getName() const;
 	int convertCharToInt(char x);
 	int calcNewSol();
+	void updateBoardAndTools(char c, int x, int y);
 
 
 };
