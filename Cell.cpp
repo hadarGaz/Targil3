@@ -17,7 +17,7 @@ void Cell::setGamerType(int gamer)
 
 bool Cell::isCellEmpty()
 {
-	if (this->cellType == (int)Type::emptyType)
+	if (this->cellType == (int)Type::emptyType && this->soldier == nullptr && GamerA ==0 && GamerB ==0)
 		return true;
 	else
 		return false;
@@ -27,4 +27,14 @@ int Cell::returnedCellType() const
 {
 	return this->cellType;
 
+}
+
+int Cell::returnNumOfGamer()
+{
+	if (GamerA != 0)
+		return 1;
+	else if (GamerB != 0)
+		return 2;
+	else
+		return 0;
 }

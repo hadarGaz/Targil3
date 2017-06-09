@@ -211,8 +211,9 @@ void GameManager::setSoldiersRandom()
 void GameManager::run()
 {
 	int win = 0;
-	GameMove tempGameMove2(0, 0, 0, 0);
+	GameMove tempGameMove2(1, 1, 1, 1);
 
+	//GameMove tempGameMove1(0, 0, 0, 0);
 	while (!win)
 	{
 		GameMove tempGameMove1 = gamers[0]->play(tempGameMove2);

@@ -13,5 +13,6 @@ public:
 	void setGamerType(int gamer);
 	bool isCellEmpty();
 	int returnedCellType() const;
+	int returnNumOfGamer();
 
 };

@@ -21,6 +21,7 @@ class Soldier {
 	int frPass = 0;
 	bool isAlive = true;
 	friend class GameManager;
+	friend class AlgoPalyer;
 public:
 	void set(int x, int y, int ch);
 	void move(int x, int y);
@@ -29,8 +30,8 @@ public:
 	void draw(int soldierNum) const;
 	void setCondition(int soldierNum);
 	int getsoldierNum();
-	int getsoldierX();
-	int getsoldierY();
+	//int getsoldierX();
+	//int getsoldierY();
 
 
 };
