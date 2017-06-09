@@ -7,6 +7,7 @@
 #include "GameMove.h"
 #include <map>
 #include "PBoard.h"
+#include <iostream>
 #define _CRT_SECURE_NO_WARNINGS
 
 class GameManager {
@@ -24,7 +25,8 @@ class GameManager {
 	int setSol1 = 0, setSol2 = 0, setSol3 = 0, setSol7 = 0, setSol8 = 0, setSol9 = 0;
 	string wrongCharsSet;
 	int delay = 20;
-	PBoard mainPboard;
+	PBoard PBoardForPlayer1;
+	PBoard PBoardForPlayer2;
 public:
 	//ctor
 	GameManager() {

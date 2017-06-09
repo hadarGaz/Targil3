@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <cstdlib>
 #include <stdlib.h> 
 #include <stdio.h>
@@ -9,15 +8,16 @@
 #include <windows.h>
 #include "Utils.h"
 #include "enums.h"
+#include "SoliderBase.h"
 using namespace std;
 
 extern bool quietMode;
 
-class Soldier {
+class Soldier : public SoliderBase {
 	int _x = 0, _y = 0;
 	int _x_dir = 0, _y_dir = 0;
-	int soldierNum =0;
-	int gamerNum=0;
+	int soldierNum = 0;
+	int gamerNum = 0;
 	int seaPass = 0;
 	int frPass = 0;
 	bool isAlive = true;
