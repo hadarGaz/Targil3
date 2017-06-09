@@ -4,7 +4,8 @@
 #include <iostream>
 class Cell {
 	int cellType = 0;
-
+	int GamerA = 0;
+	int GamerB = 0;
 public:
 	Soldier* soldier = nullptr;
 

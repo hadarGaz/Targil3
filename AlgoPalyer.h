@@ -3,10 +3,11 @@
 #include <string>
 #include "BoardData.h"
 #include "Soldier.h"
+#include "Cell.h"
 class AlgoPalyer : public AbstractPlayer {
 	enum { rows = 13, cols = 13 };
 	const BoardData* pboardData;
-	char boardOfChar[rows][cols];
+	Cell copyBoard[rows][cols];
 	Soldier tools[3];
 	int numOfPlayer;
 	int enemyFlag[2];

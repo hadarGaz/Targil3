@@ -37,8 +37,10 @@ void AlgoPalyer::init(const BoardData& board) //get pboard
  GameMove AlgoPalyer::play(const GameMove& opponentsMove)
 {
 	GameMove gameMove(3, 3, 4, 3);
+
 	if (convertCharToInt(pboardData->charAt(tools[currSoldier - 1].getsoldierX, tools[currSoldier - 1].getsoldierY)) != currSoldier)
 		currSoldier = calcNewSol();
+
 
 	return gameMove;
 }
