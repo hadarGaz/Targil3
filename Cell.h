@@ -10,6 +10,8 @@ public:
 	Soldier* soldier = nullptr;
 
 	void setCellType(int num);
+	void setGamerType(int gamer);
 	bool isCellEmpty();
 	int returnedCellType() const;
+
 };
