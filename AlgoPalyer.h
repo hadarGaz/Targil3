@@ -21,6 +21,6 @@ public:
 	int convertCharToInt(char x);
 	int calcNewSol();
 	int calcNewMove(int &to_x, int& to_y);
-	void updateBoardAndTools(char curr, int x, int y) {
+	void updateBoardAndTools(char curr, int x, int y);
 
 };
