@@ -36,12 +36,24 @@ void AlgoPalyer::init(const BoardData& board) //get pboard
 }
  GameMove AlgoPalyer::play(const GameMove& opponentsMove)
 {
-	GameMove gameMove(3, 3, 4, 3);
-
+	 int from_x, from_y;
+	 int to_x, to_y;
+	 int found = 0;
 	if (convertCharToInt(pboardData->charAt(tools[currSoldier - 1].getsoldierX, tools[currSoldier - 1].getsoldierY)) != currSoldier)
 		currSoldier = calcNewSol();
+	from_x = tools[currSoldier - 1].getsoldierX;
+	from_y = tools[currSoldier - 1].getsoldierY;
 
-
+	while (!found)
+	{
+		int getNewMove = calcNewMove(to_x, to_y);
+		if (!getNewMove)
+			currSoldier = calcNewSol();
+		else
+			found = 1;
+	}
+	
+	GameMove gameMove(from_x, from_y, to_x, to_y);
 	return gameMove;
 }
  string AlgoPalyer::getName() const
@@ -59,4 +71,21 @@ int AlgoPalyer::convertCharToInt(char x)
 int AlgoPalyer::calcNewSol()
 {
 	return 0;
+}
+
+int AlgoPalyer::calcNewMove(int &to_x, int& to_y)
+{
+	int found = 0;
+	while (!found)
+	{
+		if (numOfPlayer == 1)
+			currSoldier = currSoldier++ % 3;
+		
+		else if(numOfPlayer == 2)
+			currSoldier = currSoldier++ % 3;
+		
+		if (convertCharToInt(pboardData->charAt(tools[currSoldier - 1].getsoldierX, tools[currSoldier - 1].getsoldierY)) == currSoldier)
+			found = 1;
+	}
+	return 0; // if sol stuck
 }
