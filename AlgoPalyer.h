@@ -8,6 +8,8 @@ class AlgoPalyer : public AbstractPlayer {
 	const BoardData* pboardData;
 	char boardOfChar[rows][cols];
 	Soldier tools[3];
+	int numOfPlayer;
+	int enemyFlag[2];
 	int currSoldier;
 public:
 	int numOfPlayer;
@@ -17,4 +19,6 @@ public:
 	virtual string getName() const;
 	int convertCharToInt(char x);
 	int calcNewSol();
+
+
 };
