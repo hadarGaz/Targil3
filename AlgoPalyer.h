@@ -20,6 +20,7 @@ public:
 	virtual string getName() const;
 	int convertCharToInt(char x);
 	int calcNewSol();
-	int AlgoPalyer::calcNewMove(int &to_x, int& to_y);
+	int calcNewMove(int &to_x, int& to_y);
+	void updateBoardAndTools(char curr, int x, int y) {
 
 };
