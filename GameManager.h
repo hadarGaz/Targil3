@@ -30,7 +30,9 @@ public:
 	GameManager() {
 		//setRandomBoard();
 		gamers[0] = &algoPlayer[0];
+		gamers[0]->setPlayer(1);
 		gamers[1] = &algoPlayer[1];
+		gamers[1]->setPlayer(2);
 	}
 	//functions
 	void setRandomBoard();

@@ -6,19 +6,22 @@ class AlgoPalyer : public AbstractPlayer {
 	enum { rows = 13, cols = 13 };
 	const BoardData* pboardData;
 	char boardOfChar[rows][cols];
+	
 public:
+	int numOfPlayer;
 	virtual void setPlayer(int player)
 	{
-		int i = 0;
+		numOfPlayer = player;
 	}
 	virtual void init(const BoardData& board) //get pboard
 	{
-		pboardData = &board;
-		pboardData->charAt(1, 1);
+		pboardData = &board; //now pboardData point to PBoard class
+		
 	}
 	virtual GameMove play(const GameMove& opponentsMove)
 	{
 		 GameMove gameMove(3,3,4,3);
+		 pboardData->charAt(3, 3);
 		 return gameMove;
 	}
 	virtual string getName() const

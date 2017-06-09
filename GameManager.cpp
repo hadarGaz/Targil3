@@ -177,7 +177,6 @@ void GameManager::init()
 	mainPboard.setAdressToBoard(board);
 	gamers[0]->init(mainPboard);
 	gamers[1]->init(mainPboard);
-	//gamers[0]->init(pboard);
 	if (!quietMode)
 		printing();
 }
