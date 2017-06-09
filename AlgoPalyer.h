@@ -8,26 +8,13 @@ class AlgoPalyer : public AbstractPlayer {
 	const BoardData* pboardData;
 	char boardOfChar[rows][cols];
 	Soldier tools[3];
+	int currSoldier;
 public:
 	int numOfPlayer;
-	virtual void setPlayer(int player)
-	{
-		numOfPlayer = player;
-	}
-	virtual void init(const BoardData& board) //get pboard
-	{
-		pboardData = &board; //now pboardData point to PBoard class
-		
-	}
-	virtual GameMove play(const GameMove& opponentsMove)
-	{
-		 GameMove gameMove(3,3,4,3);
-		 pboardData->charAt(3, 3);
-		 return gameMove;
-	}
-	virtual string getName() const
-	{
-		return "a";
-	}
-
+	virtual void setPlayer(int player);
+	virtual void init(const BoardData& board); //get pboard
+	virtual GameMove play(const GameMove& opponentsMove);
+	virtual string getName() const;
+	int convertCharToInt(char x);
+	int calcNewSol();
 };

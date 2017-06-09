@@ -8,12 +8,11 @@
 #include <windows.h>
 #include "Utils.h"
 #include "enums.h"
-#include "SoliderBase.h"
 using namespace std;
 
 extern bool quietMode;
 
-class Soldier : public SoliderBase {
+class Soldier {
 	int _x = 0, _y = 0;
 	int _x_dir = 0, _y_dir = 0;
 	int soldierNum = 0;
@@ -29,5 +28,9 @@ public:
 	void earse(int oldX, int oldY);
 	void draw(int soldierNum) const;
 	void setCondition(int soldierNum);
+	int getsoldierNum();
+	int getsoldierX();
+	int getsoldierY();
+
 
 };

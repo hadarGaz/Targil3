@@ -102,3 +102,17 @@ void Soldier::draw() const
 {
 	draw(soldierNum);
 }
+
+int Soldier::getsoldierNum()
+{
+	return soldierNum;
+}
+
+int Soldier::getsoldierX()
+{
+	return _x;
+}
+int Soldier::getsoldierY()
+{
+	return _y;
+}
