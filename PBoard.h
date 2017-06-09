@@ -13,13 +13,10 @@ public:
 		if (ch == 0)
 			return 'h';
 	}
-	void setAdressToBoard(Cell _pboard[14][14])
+	void setPointerAndNumOfGamer(Cell _pboard[14][14], int _gamerNum)
 	{
 		pBoard = _pboard;
-		//(pBoard)[1][1].setCellType(2);
-	}
-
-	void setGamerNum(int _gamerNum) {
 		gamerNum = _gamerNum;
 	}
+
 };
