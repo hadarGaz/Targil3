@@ -211,12 +211,12 @@ void GameManager::setSoldiersRandom()
 void GameManager::run()
 {
 	int win = 0;
-	GameMove tempGameMove2(1, 1, 1, 1);
+	GameMove* tempGameMove2 = new GameMove(1, 1, 1, 1);
 
 	//GameMove tempGameMove1(0, 0, 0, 0);
 	while (!win)
 	{
-		GameMove tempGameMove1 = gamers[0]->play(tempGameMove2);
+		GameMove tempGameMove1 = gamers[0]->play(*tempGameMove2);
 		if (movementValidation(tempGameMove1,board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
 				move(tempGameMove1,1);
 			

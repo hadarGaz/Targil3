@@ -33,8 +33,8 @@ void AlgoPalyer::init(const BoardData& board) //get pboard
 			found = 1;
 	}
 	
-	GameMove gameMove(from_x, from_y, to_x, to_y);
-	return gameMove;
+	GameMove* gameMove = new GameMove(from_x, from_y, to_x, to_y);
+	return *gameMove;
 }
  string AlgoPalyer::getName() const
 {
