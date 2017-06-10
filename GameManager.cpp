@@ -447,6 +447,7 @@ void GameManager::setBoardFromFile(ifstream& inFile) {
 				updateSetSoliderCounter(currentChar - '0');
 				if (setSol1 <= 1 || setSol2 <= 1 || setSol3 <= 1)
 				{
+					(board[j][i]).soldier = new Soldier;
 					board[j][i].soldier->setCondition(currentChar - '0');
 					board[j][i].soldier->set(j,i, currentChar - '0');
 				}
@@ -456,6 +457,7 @@ void GameManager::setBoardFromFile(ifstream& inFile) {
 				updateSetSoliderCounter(currentChar - '0');
 				if (setSol7 <= 1 || setSol8 <= 1 || setSol9 <= 1)
 				{
+					(board[j][i]).soldier = new Soldier;
 					board[j][i].soldier->setCondition(currentChar - '0');
 					board[j][i].soldier->set(j, i, currentChar - '0');
 				}
