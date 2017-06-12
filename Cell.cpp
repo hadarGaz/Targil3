@@ -7,7 +7,12 @@ void Cell::setCellType(int num)
 
 void Cell::setGamerType(int gamer)
 {
-	if (gamer == (int)GamerA::soldier1 || gamer == (int)GamerA::soldier2 || gamer == (int)GamerA::soldier3 || gamer == (int)GamerB::GamerB) {
+	if (gamer == 0)
+	{
+		GamerA = 0;
+		GamerB = 0;
+	}
+	if (gamer == (int)GamerA::soldier1 || gamer == (int)GamerA::soldier2 || gamer == (int)GamerA::soldier3 || gamer == (int)GamerA::GamerA) {
 		GamerA = gamer;
 	}
 	else {

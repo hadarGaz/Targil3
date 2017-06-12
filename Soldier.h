@@ -15,6 +15,7 @@ extern bool quietMode;
 class Soldier {
 	int _x = 0, _y = 0;
 	int _x_dir = 0, _y_dir = 0;
+	int oldX = 0, oldY = 0;
 	int soldierNum = 0;
 	int gamerNum = 0;
 	int seaPass = 0;

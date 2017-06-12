@@ -2,6 +2,8 @@
 #include "BoardData.h"
 #include "Cell.h"
 #include "enums.h"
+#include <stdio.h>
+#include <stdlib.h>
 class PBoard : public BoardData {
 	Cell (*pBoard)[(int)Sizes::size];
 	int gamerNum;
@@ -11,9 +13,9 @@ public:
 	{
 		if ((pBoard)[x][y].soldier != NULL)
 		{
-			char numOfSoldier = (pBoard)[x][y].soldier->getsoldierNum();
+			int numOfSoldier = (pBoard)[x][y].soldier->getsoldierNum();
 			if ((gamerNum == 1 && numOfSoldier <= (int)GamerA::soldier3) || (gamerNum == 2 && numOfSoldier >= (int)GamerB::soldier7))
-				return numOfSoldier;
+				return numOfSoldier+'0';
 			else
 				return '#';
 		}

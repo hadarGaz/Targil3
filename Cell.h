@@ -14,5 +14,6 @@ public:
 	bool isCellEmpty();
 	int returnedCellType() const;
 	int returnNumOfGamer();
+	
 
 };

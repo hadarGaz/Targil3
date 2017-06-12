@@ -23,6 +23,7 @@ void GameManager::paramMenager()
 		{
 			init();
 			run();
+			clearTheGame();
 			Sleep(50 * delay);
 		}
 	}
@@ -178,6 +179,7 @@ void GameManager::init()
 	PBoardForPlayer2.setPointerAndNumOfGamer(board,2);
 	gamers[0]->init(PBoardForPlayer1);
 	gamers[1]->init(PBoardForPlayer2);
+	
 
 	if (!quietMode)
 		printing();
@@ -210,49 +212,54 @@ void GameManager::setSoldiersRandom()
 
 void GameManager::run()
 {
-	int win = 0;
+	bool win = false;
 	GameMove* tempGameMove2 = new GameMove(1, 1, 1, 1);
-
-	//GameMove tempGameMove1(0, 0, 0, 0);
 	while (!win)
 	{
 		GameMove tempGameMove1 = gamers[0]->play(*tempGameMove2);
-		if (movementValidation(tempGameMove1,board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
-				move(tempGameMove1,1);
-			
+		if (movementValidation(tempGameMove1, board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
+		win = move(tempGameMove1, 1);
 
-		GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
-		if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier));
-		move(tempGameMove2, 2);
+		if (!win)
+		{
+			GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
+			if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier));
+			win = move(tempGameMove2, 2);
+		}
 	}
+	delete(tempGameMove2);
+
 	if(ifBoardFile)
 		currFileBoard++;
 }
-void GameManager::move(GameMove& gameMove, int gamerNum)
+bool GameManager::move(GameMove& gameMove, int gamerNum)
 {
 	bool Win = false;
-	if (board[gameMove.to_x][gameMove.to_y].returnedCellType() > 2)
+	bool WinTheGame = false;
+	if (board[gameMove.to_x][gameMove.to_y].returnedCellType() > 2) //הגיע לדגל
+	{
 		win(gamerNum);
+		return WinTheGame=true;
+	}
 	else if (board[gameMove.to_x][gameMove.to_y].soldier)
 	{
 		Win = attack(board[gameMove.from_x][gameMove.from_y].soldier->soldierNum, board[gameMove.to_x][gameMove.to_y].soldier->soldierNum, gameMove.to_x, gameMove.to_y);
 		if (Win) {
 			delete(board[gameMove.to_x][gameMove.to_y].soldier);
 			soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
-			win(gamerNum);
-			updateDeadSoliderCounter(gamerNum, Win);
+			WinTheGame = updateDeadSoliderCounter(gamerNum, Win);
 		}
 		else {
 			delete(board[gameMove.from_x][gameMove.from_y].soldier);
 			board[gameMove.from_x][gameMove.from_y].soldier = nullptr;
-			updateDeadSoliderCounter(gamerNum, !Win);
+			WinTheGame = updateDeadSoliderCounter(gamerNum, !Win);
 		}
 	}
 	else
 	{
 		soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
 	}
-		
+	return WinTheGame;
 }
 
 void GameManager::soliderMovementOnBoard(int from_x,int from_y,int to_x ,int to_y) {
@@ -261,15 +268,27 @@ void GameManager::soliderMovementOnBoard(int from_x,int from_y,int to_x ,int to_
 	board[from_x][from_y].soldier = nullptr;
 }
 
-void GameManager::updateDeadSoliderCounter(int gamerNum,bool win) {
-	if (gamerNum == (int)GamerA::GamerA && win)
+bool GameManager::updateDeadSoliderCounter(int gamerNum,bool Win) {
+	if (gamerNum == 1 && Win)
 		soldierDeadPlayer2++;
-	if (gamerNum == (int)GamerA::GamerA && !win)
+	else if (gamerNum == 1 && !Win)
 		soldierDeadPlayer1++;
-	if (gamerNum == (int)GamerB::GamerB && win)
+	else if (gamerNum == 2 && Win)
 		soldierDeadPlayer1++;
-	if (gamerNum == (int)GamerB::GamerB && !win)
+	else if (gamerNum == 2 && !Win)
 		soldierDeadPlayer2++;
+
+	if (soldierDeadPlayer1 == 3)
+	{
+		win(2);
+		return true;
+	}
+	else if (soldierDeadPlayer2 == 3)
+	{
+		win(1);
+		return true;
+	}
+	return false;
 }
 
 bool GameManager::attack(int currSoldierNum,int enemyNum, int _x, int _y) {
@@ -613,4 +632,18 @@ void GameManager::drowSoldiers() const
 				board[i][j].soldier->draw();
 		}
 	}
+}
+
+void GameManager::clearTheGame()
+{
+	
+		for (int i = 0; i < (int)Sizes::size; i++)
+		{
+			for (int j = 0; j < (int)Sizes::size; j++)
+			{
+				board[i][j].soldier = nullptr;
+				board[i][j].setCellType(0);
+				board[i][j].setGamerType(0);
+			}
+		}
 }
