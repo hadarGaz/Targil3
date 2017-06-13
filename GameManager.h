@@ -10,6 +10,7 @@
 #include <iostream>
 #define _CRT_SECURE_NO_WARNINGS
 
+
 class GameManager {
 	enum { MIN_X = 1, MAX_X = 13, MIN_Y = 1, MAX_Y = 13 };
 	Cell board[(int)Sizes::size][(int)Sizes::size]; //13
@@ -27,6 +28,7 @@ class GameManager {
 	int delay = 20;
 	PBoard PBoardForPlayer1;
 	PBoard PBoardForPlayer2;
+	char winner = 0;
 public:
 	//ctor
 	GameManager() {
@@ -71,4 +73,5 @@ public:
 	void printing() const;
 	void drowSoldiers()const;
 	void clearTheGame();
+	void endMessagePerGame(int GameCycle, int numOfMoves) const;
 };

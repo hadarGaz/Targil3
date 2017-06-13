@@ -5,7 +5,6 @@ void AlgoPalyer::setPlayer(int player)
 }
 void AlgoPalyer::init(const BoardData& board) //get pboard
 {
-	//clearTheGame();
 	pboardData = &board; //now pboardData point to PBoard class
 	initDirArr();
 	for (int y = 0; y < (int)Sizes::size; y++) {
@@ -14,7 +13,6 @@ void AlgoPalyer::init(const BoardData& board) //get pboard
 			updateBoardAndTools(curr, x, y);
 		}
 	}
-
 }
 void AlgoPalyer::initDirArr()
 {
@@ -30,7 +28,7 @@ void AlgoPalyer::initDirArr()
 	 int to_x, to_y;
 	 int found = 0;
 	 int trueSol = convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y));
-	 if ((trueSol != currSoldier ) && (trueSol =! (currSoldier + 6)))
+	 if ((trueSol != currSoldier ) && (trueSol != (currSoldier + 6)))
 		currSoldier = calcNewSol();
 	from_x = tools[currSoldier - 1]._x;
 	from_y = tools[currSoldier - 1]._y;
@@ -172,7 +170,7 @@ AlgoPalyer::Direction AlgoPalyer::findDir(int from_x,int from_y,int& x_dir,int& 
 	return d;
 }
 
-int AlgoPalyer::calcNewSol()
+int  AlgoPalyer::calcNewSol()
 {
 	int found = 0;
 	while (!found)
@@ -184,7 +182,10 @@ int AlgoPalyer::calcNewSol()
 			currSoldier = currSoldier++ % 3;
 
 		if (convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y)) == currSoldier)
+		{
 			found = 1;
+			return currSoldier;
+		}
 	}
 	return 0; // if sol stuck
 }
