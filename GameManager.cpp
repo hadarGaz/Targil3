@@ -254,14 +254,16 @@ bool GameManager::move(GameMove& gameMove, int gamerNum)
 	{
 		Win = attack(board[gameMove.from_x][gameMove.from_y].soldier->soldierNum, board[gameMove.to_x][gameMove.to_y].soldier->soldierNum, gameMove.to_x, gameMove.to_y);
 		if (Win) {
+			board[gameMove.to_x][gameMove.to_y].soldier->earse(gameMove.to_x, gameMove.to_y);
 			delete(board[gameMove.to_x][gameMove.to_y].soldier);
 			soliderMovementOnBoard(gameMove.from_x, gameMove.from_y, gameMove.to_x, gameMove.to_y);
 			WinTheGame = updateDeadSoliderCounter(gamerNum, Win);
 		}
 		else {
+			board[gameMove.from_x][gameMove.from_y].soldier->earse(gameMove.from_x, gameMove.from_y);
 			delete(board[gameMove.from_x][gameMove.from_y].soldier);
 			board[gameMove.from_x][gameMove.from_y].soldier = nullptr;
-			WinTheGame = updateDeadSoliderCounter(gamerNum, !Win);
+			WinTheGame = updateDeadSoliderCounter(gamerNum, Win);
 		}
 	}
 	else
