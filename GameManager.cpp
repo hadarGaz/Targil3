@@ -212,25 +212,34 @@ void GameManager::setSoldiersRandom()
 
 void GameManager::run()
 {
-	bool win = false;
+	bool exit = false;
+	static int GameCycle = 0;
+	int numOfMoves = 0;
+	GameCycle++;
 	GameMove* tempGameMove2 = new GameMove(1, 1, 1, 1);
-	while (!win)
+	while (!exit)
 	{
+		numOfMoves++;
 		GameMove tempGameMove1 = gamers[0]->play(*tempGameMove2);
 		if (movementValidation(tempGameMove1, board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
-		win = move(tempGameMove1, 1);
+		exit = move(tempGameMove1, 1);
 
-		if (!win)
+		if (!exit)
 		{
 			GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
 			if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier));
-			win = move(tempGameMove2, 2);
+			exit = move(tempGameMove2, 2);
 		}
+		if (numOfMoves == 1250)
+			exit = true;
 	}
 	delete(tempGameMove2);
 
 	if(ifBoardFile)
 		currFileBoard++;
+	if (quietMode == true)
+		endMessagePerGame(GameCycle, 2 * numOfMoves);
+
 }
 bool GameManager::move(GameMove& gameMove, int gamerNum)
 {
@@ -431,9 +440,15 @@ void GameManager::win(int gamerNum)
 	if (quietMode == false)
 		cout << "The gamer: " << gamerNum << " won this game" << endl;
 	if (gamerNum == 1)
+	{
 		scorePlayer1++;
+		winner = 'A';
+	}
 	else
+	{
 		scorePlayer2++;
+		winner = 'B';
+	}
 
 }
 
@@ -648,4 +663,19 @@ void GameManager::clearTheGame()
 				board[i][j].setGamerType(0);
 			}
 		}
+}
+
+void GameManager::endMessagePerGame(int GameCycle, int numOfMoves) const
+{
+	clearScreen();
+	cout << "Game cycle: " << GameCycle << endl;
+	if(winner=='A')
+		cout << "Num moves: " << numOfMoves-1 << endl;
+	else
+		cout << "Num moves: " << numOfMoves << endl;
+
+	if (winner == '0')
+		cout << "Wineer: NONE" << endl;
+	else
+		cout << "Wineer: " << winner << endl;
 }

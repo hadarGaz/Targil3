@@ -11,16 +11,17 @@ void AlgoPalyer::setPlayer(int player)
 }
 void AlgoPalyer::init(const BoardData& board) //get pboard
 {
-	//clearTheGame();
 	pboardData = &board; //now pboardData point to PBoard class
 	initDirArr();
 	for (int y = 0; y < (int)Sizes::size; y++) {
 		for (int x = 0; x < (int)Sizes::size; x++) {
+			copyBoard[x][y].setCellType(0);
+			copyBoard[x][y].setGamerType(0);
 			char curr = pboardData->charAt(x, y);
 			updateBoardAndTools(curr, x, y);
 		}
 	}
-
+	currSoldier = 1;
 }
 void AlgoPalyer::initDirArr()
 {
@@ -36,7 +37,7 @@ void AlgoPalyer::initDirArr()
 	 int to_x, to_y;
 	 int found = 0;
 	 int trueSol = convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y));
-	 if ((trueSol != currSoldier ) && (trueSol =! (currSoldier + 6)))
+	 if ((trueSol != currSoldier ) && (trueSol != (currSoldier + 6)))
 		currSoldier = calcNewSol();
 	from_x = tools[currSoldier - 1]._x;
 	from_y = tools[currSoldier - 1]._y;
@@ -45,7 +46,11 @@ void AlgoPalyer::initDirArr()
 	{
 		int getNewMove = calcNewMove(from_x, from_y, to_x, to_y);
 		if (!getNewMove)
+		{
 			currSoldier = calcNewSol();
+			from_x = tools[currSoldier - 1]._x;
+			from_y = tools[currSoldier - 1]._y;
+		}
 		else
 		{
 			found = 1;
@@ -178,7 +183,7 @@ AlgoPalyer::Direction AlgoPalyer::findDir(int from_x,int from_y,int& x_dir,int& 
 	return d;
 }
 
-int AlgoPalyer::calcNewSol()
+int  AlgoPalyer::calcNewSol()
 {
 	int found = 0;
 	while (!found)
@@ -189,8 +194,12 @@ int AlgoPalyer::calcNewSol()
 		else if (numOfPlayer == 2)
 			currSoldier = currSoldier++ % 3;
 
-		if (convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y)) == currSoldier)
+		if ((convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y)) == currSoldier) || 
+			(convertCharToInt(pboardData->charAt(tools[currSoldier - 1]._x, tools[currSoldier - 1]._y)) == currSoldier+6))
+		{
 			found = 1;
+			return currSoldier;
+		}
 	}
 	return 0; // if sol stuck
 }
@@ -207,8 +216,8 @@ void AlgoPalyer::updateBoardAndTools(char curr, int x, int y) {
 		}
 	}
 	if (curr == '2' || curr == '8') {
-		tools[1].set(x, y, curr);
-		tools[1].setCondition(curr);
+		tools[1].set(x, y, curr - '0');
+		tools[1].setCondition(curr - '0');
 		if (curr == '2') {
 			copyBoard[x][y].setGamerType((int)GamerA::soldier2);
 		}
@@ -217,8 +226,8 @@ void AlgoPalyer::updateBoardAndTools(char curr, int x, int y) {
 		}
 	}
 	if (curr == '3' || curr == '9') {
-		tools[2].set(x, y, curr);
-		tools[2].setCondition(curr);
+		tools[2].set(x, y, curr - '0');
+		tools[2].setCondition(curr - '0');
 		if (curr == '3') {
 			copyBoard[x][y].setGamerType((int)GamerA::soldier3);
 		}
