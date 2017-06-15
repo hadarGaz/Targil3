@@ -8,10 +8,9 @@
 
 
 class AlgorithmRegistration{
-	
+	static std::map<std::string, std::function<AbstractPlayer*(void)>> AlgoFactory;
 
 public:
-	static std::map<std::string, std::function<AbstractPlayer*(void)>> AlgoFactory;
 	AlgorithmRegistration(const std::string& id, std::function<AbstractPlayer*(void)> func);
 	~AlgorithmRegistration() {};
 

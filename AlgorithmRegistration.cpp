@@ -2,13 +2,11 @@
 
 std::map<std::string, std::function<AbstractPlayer*(void)>> AlgorithmRegistration::AlgoFactory;
 
-
 AlgorithmRegistration::AlgorithmRegistration(const std::string& id, std::function<AbstractPlayer*(void)> func) {
 
-	AlgoFactory[id] = nullptr;
+	AlgoFactory[id] = func;
 
 }
-
 
 
 AbstractPlayer* AlgorithmRegistration::getAlgoForId(const std::string& id) {
