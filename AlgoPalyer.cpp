@@ -1,7 +1,9 @@
 #include "AlgoPalyer.h"
 #include "AlgorithmRegistration.h"
 
-
+AlgorithmRegistration algo_NofarKedemID("algo_NofarAndHadar",
+	[] {return new AlgoPalyer();}
+);
 
 void AlgoPalyer::setPlayer(int player)
 {

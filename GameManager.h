@@ -34,7 +34,6 @@ class GameManager {
 public:
 	//ctor
 	GameManager() {
-		//setRandomBoard();
 		gamers[0] = AlgorithmRegistration::getAlgoForId("algo_NofarAndHadar");
 		gamers[0]->setPlayer(1);
 		gamers[1] = AlgorithmRegistration::getAlgoForId("algo_NofarAndHadar");

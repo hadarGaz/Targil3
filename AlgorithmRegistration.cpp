@@ -1,3 +1,4 @@
+#pragma init_seg(lib)
 #include "AlgorithmRegistration.h"
 
 std::map<std::string, std::function<AbstractPlayer*(void)>> AlgorithmRegistration::AlgoFactory;
