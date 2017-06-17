@@ -15,8 +15,8 @@ void GameManager::paramMenager()
 	openFolder(tempPath);
 
 	currFileBoard = boardFile.begin();
-
-	while (GameOver == false)
+	int i = 0;
+	while (GameOver == false && (i < numberOfGame) )
 	{
 		setBoard();
 		if (GameOver == false)
@@ -26,6 +26,7 @@ void GameManager::paramMenager()
 			clearTheGame();
 			Sleep(50 * delay);
 		}
+		i++;
 	}
 	endMessage();
 }
@@ -65,6 +66,14 @@ void GameManager::commandLine(int argc, char* argv[])
 		{
 			if (strcmp(argv[i + 1], "f") == 0)
 				ifBoardFile = true;
+			else if (strcmp(argv[i + 1], "r") == 0)
+			{
+				if ((argv[i + 2][0])>= '0' && (argv[i + 2][0] <= '9'))
+				{
+					numberOfGame = atoi(argv[i + 2]);
+					i++;
+				}
+			}
 		}
 		
 		else if (strcmp(argv[i], "-path") == 0)
@@ -179,7 +188,6 @@ void GameManager::init()
 	PBoardForPlayer2.setPointerAndNumOfGamer(board,2);
 	gamers[0]->init(PBoardForPlayer1);
 	gamers[1]->init(PBoardForPlayer2);
-	
 
 	if (!quietMode)
 		printing();
@@ -232,6 +240,8 @@ void GameManager::run()
 		}
 		if (numOfMoves == 1250)
 			exit = true;
+		//Sleep(50 * delay);
+
 	}
 	delete(tempGameMove2);
 
@@ -239,6 +249,8 @@ void GameManager::run()
 		currFileBoard++;
 	if (quietMode == true)
 		endMessagePerGame(GameCycle, 2 * numOfMoves);
+
+
 
 }
 bool GameManager::move(GameMove& gameMove, int gamerNum)
@@ -277,6 +289,9 @@ void GameManager::soliderMovementOnBoard(int from_x,int from_y,int to_x ,int to_
 	board[from_x][from_y].soldier->move(to_x, to_y);
 	board[to_x][to_y].soldier = board[from_x][from_y].soldier;
 	board[from_x][from_y].soldier = nullptr;
+	if (quietMode == false)
+		printSpecialCell(from_x, from_y);
+
 }
 
 bool GameManager::updateDeadSoliderCounter(int gamerNum,bool Win) {
@@ -599,11 +614,8 @@ void GameManager::printBoard() const
 		printEndLine();
 	}
 	cout << "SCORE: " << endl;
-	for (int i = 0; i < (int)Sizes::sizeOfGamers; i++) {
-		//cout << "Gamer: " << gamers[i].name;
-		//cout << " = " << gamers[i].score << endl;
-	}
-
+	cout << "Gamer: A = " << scorePlayer1 << endl;;
+	cout << "Gamer: B = " << scorePlayer2;
 }
 
 void GameManager::printLetters() const
@@ -678,4 +690,21 @@ void GameManager::endMessagePerGame(int GameCycle, int numOfMoves) const
 		cout << "Wineer: NONE" << endl;
 	else
 		cout << "Wineer: " << winner << endl;
+}
+
+void GameManager::printSpecialCell(int oldX, int oldY) {
+	if (((board[oldX][oldY]).returnedCellType() == 1) && !((board[oldX][oldY]).soldier)) {
+		gotoxy(4 * oldX + 1, 2 * oldY);
+		setTextColor(BLACK, YELLOW);
+		cout << "SEA";
+		setTextColor(WHITE);
+
+	}
+	else if (((board[oldX][oldY]).returnedCellType() == 2)
+		&& !((board[oldX][oldY]).soldier)) {
+		gotoxy(4 * oldX + 1, 2 * oldY);
+		setTextColor(BLACK, PURPLE);
+		cout << "FR ";
+		setTextColor(WHITE);
+	}
 }

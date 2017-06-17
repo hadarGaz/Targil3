@@ -60,7 +60,7 @@ void AlgoPalyer::initDirArr()
 }
  string AlgoPalyer::getName() const
 {
-	return "a";
+	return "311501928";
 }
 
 int AlgoPalyer::convertCharToInt(char x)

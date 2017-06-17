@@ -8,6 +8,7 @@
 #include <map>
 #include "PBoard.h"
 #include <iostream>
+#include <stdlib.h> 
 #define _CRT_SECURE_NO_WARNINGS
 
 
@@ -29,6 +30,7 @@ class GameManager {
 	PBoard PBoardForPlayer1;
 	PBoard PBoardForPlayer2;
 	char winner = 0;
+	int numberOfGame = 10;
 public:
 	//ctor
 	GameManager() {
@@ -74,4 +76,5 @@ public:
 	void drowSoldiers()const;
 	void clearTheGame();
 	void endMessagePerGame(int GameCycle, int numOfMoves) const;
+	void GameManager::printSpecialCell(int oldX, int oldY);
 };
