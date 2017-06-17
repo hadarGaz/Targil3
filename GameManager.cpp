@@ -1,5 +1,4 @@
 #include "GameManager.h"
-
 void GameManager::paramMenager()
 {
 	char* tempPath;
@@ -30,6 +29,7 @@ void GameManager::paramMenager()
 	}
 	endMessage();
 }
+
 
 void GameManager::openFolder(char* tempPath)
 {
