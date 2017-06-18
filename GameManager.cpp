@@ -210,7 +210,7 @@ void GameManager::setSoldiersRandom()
 		}
 		if (j == 4)
 			j = j + 3;
-		(board[x][y]).soldier = new Soldier;
+		(board[x][y]).soldier = new HadarNofarSoldier;
 		(board[x][y]).soldier->isAlive = true;
 		(board[x][y]).soldier->setCondition(j);
 		(board[x][y]).soldier->set(x, y, j);
@@ -229,18 +229,17 @@ void GameManager::run()
 	{
 		numOfMoves++;
 		GameMove tempGameMove1 = gamers[0]->play(*tempGameMove2);
-		if (movementValidation(tempGameMove1, board[tempGameMove1.from_x][tempGameMove1.from_y].soldier));
-		exit = move(tempGameMove1, 1);
+		if (movementValidation(tempGameMove1, board[tempGameMove1.from_x][tempGameMove1.from_y].soldier))
+			exit = move(tempGameMove1, 1);
 
 		if (!exit)
 		{
 			GameMove tempGameMove2 = gamers[1]->play(tempGameMove1);
-			if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier));
-			exit = move(tempGameMove2, 2);
+			if (movementValidation(tempGameMove2, board[tempGameMove2.from_x][tempGameMove2.from_y].soldier))
+				exit = move(tempGameMove2, 2);
 		}
 		if (numOfMoves == 1250)
 			exit = true;
-		//Sleep(50 * delay);
 
 	}
 	delete(tempGameMove2);
@@ -342,7 +341,7 @@ bool GameManager::attack(int currSoldierNum,int enemyNum, int _x, int _y) {
 	}
 
 }
-bool GameManager::movementValidation(GameMove& gameMove, Soldier* sol)
+bool GameManager::movementValidation(GameMove& gameMove, HadarNofarSoldier* sol)
 {
 	int from_x = gameMove.from_x;
 	int from_y = gameMove.from_y;
@@ -399,6 +398,7 @@ bool GameManager::movementValidation(GameMove& gameMove, Soldier* sol)
 		}
 
 	}
+	return false;
 }
 
 
@@ -498,7 +498,7 @@ void GameManager::setBoardFromFile(ifstream& inFile) {
 				updateSetSoliderCounter(currentChar - '0');
 				if (setSol1 <= 1 || setSol2 <= 1 || setSol3 <= 1)
 				{
-					(board[j][i]).soldier = new Soldier;
+					(board[j][i]).soldier = new HadarNofarSoldier;
 					board[j][i].soldier->setCondition(currentChar - '0');
 					board[j][i].soldier->set(j,i, currentChar - '0');
 				}
@@ -508,7 +508,7 @@ void GameManager::setBoardFromFile(ifstream& inFile) {
 				updateSetSoliderCounter(currentChar - '0');
 				if (setSol7 <= 1 || setSol8 <= 1 || setSol9 <= 1)
 				{
-					(board[j][i]).soldier = new Soldier;
+					(board[j][i]).soldier = new HadarNofarSoldier;
 					board[j][i].soldier->setCondition(currentChar - '0');
 					board[j][i].soldier->set(j, i, currentChar - '0');
 				}

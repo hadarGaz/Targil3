@@ -1,11 +1,11 @@
 #pragma once
 #include "BoardData.h"
-#include "Cell.h"
-#include "enums.h"
+#include "HadarNofarCell.h"
+#include "HadarNofarEnums.h"
 #include <stdio.h>
 #include <stdlib.h>
 class PBoard : public BoardData {
-	Cell (*pBoard)[(int)Sizes::size];
+	HadarNofarCell(*pBoard)[(int)Sizes::size];
 	int gamerNum;
 public:
 	PBoard () {}
@@ -32,7 +32,7 @@ public:
 				return 'B';
 		}
 	}
-	void setPointerAndNumOfGamer(Cell _pboard[14][14], int _gamerNum)
+	void setPointerAndNumOfGamer(HadarNofarCell _pboard[14][14], int _gamerNum)
 	{
 		pBoard = _pboard;
 		gamerNum = _gamerNum;
