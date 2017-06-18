@@ -18,7 +18,6 @@ class GameManager {
 	enum { MIN_X = 1, MAX_X = 13, MIN_Y = 1, MAX_Y = 13 };
 	HadarNofarCell board[(int)Sizes::size][(int)Sizes::size]; //13
 	AbstractPlayer* gamers[(int)Sizes::sizeOfGamers]; //2
-	//AlgoPalyer algoPlayer[(int)Sizes::sizeOfGamers];
 	int soldierDeadPlayer1 = 0, soldierDeadPlayer2 =0;
 	int scorePlayer1=0, scorePlayer2 = 0;
 	std::map<string, int> boardFile;
