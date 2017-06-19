@@ -68,7 +68,7 @@ void GameManager::commandLine(int argc, char* argv[])
 				ifBoardFile = true;
 			else if (strcmp(argv[i + 1], "r") == 0)
 			{
-				if ((argv[i + 2][0])>= '0' && (argv[i + 2][0] <= '9'))
+				if (argv[i + 2] != NULL && (argv[i + 2][0])>= '0' && (argv[i + 2][0] <= '9'))
 				{
 					numberOfGame = atoi(argv[i + 2]);
 					i++;
@@ -89,7 +89,7 @@ void GameManager::commandLine(int argc, char* argv[])
 		else if (strcmp(argv[i], "-delay") == 0)
 		{
 			if (quietMode == false)
-				delay = *argv[i + 1];
+				delay = atoi(argv[i + 1]);
 		}
 	}
 	paramMenager();
@@ -584,8 +584,8 @@ void GameManager::endMessage() const
 {
 	clearScreen();
 	cout << "Game Summary" << endl;
-	cout << "A points - " << scorePlayer1 << endl;
-	cout << "B points - " << scorePlayer2 << endl;
+	cout << "Algorithm name via "<< gamers[0]->getName() <<" for A point = " << scorePlayer1 << endl;
+	cout << "Algorithm name via " << gamers[1]->getName() << " for B point = " << scorePlayer2 << endl;
 }
 
 void GameManager::printBoard() const
