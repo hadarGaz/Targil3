@@ -9,7 +9,7 @@
 
 class AlgorithmRegistration{
 	static std::map<std::string, std::function<AbstractPlayer*(void)>> AlgoFactory;
-
+	friend class GameManager;
 public:
 	AlgorithmRegistration(const std::string& id, std::function<AbstractPlayer*(void)> func);
 	~AlgorithmRegistration() {};

@@ -192,6 +192,19 @@ void GameManager::init()
 	if (!quietMode)
 		printing();
 }
+void GameManager::initPlayers()
+{
+	list<string> algorithmsID;
+	for (auto& p_id_func : AlgorithmRegistration::AlgoFactory) {
+		auto ID = p_id_func.first;
+		algorithmsID.push_back(ID);
+	}
+	gamers[0] = AlgorithmRegistration::getAlgoForId(algorithmsID.front());
+	if (algorithmsID.size() > 1) {
+		algorithmsID.pop_front();
+	}
+	gamers[1] = AlgorithmRegistration::getAlgoForId(algorithmsID.front());
+}
 void GameManager::setSoldiersRandom()
 {
 	int x = 0, y = 0, found = 0;

@@ -36,17 +36,17 @@ class GameManager {
 public:
 	//ctor
 	GameManager() {
-		gamers[0] = AlgorithmRegistration::getAlgoForId("algo_NofarAndHadar");
+
+		initPlayers();
 		gamers[0]->setPlayer(1);
-		gamers[1] = AlgorithmRegistration::getAlgoForId("algo_NofarAndHadar");
 		gamers[1]->setPlayer(2);
 		hideCursor();
 	}
 	//functions
 	void setRandomBoard();
 	void paramMenager();
-	//AlgoPalyer * initPlayer();
 	void init();
+	void initPlayers();
 	void setSoldiersRandom();
 	void run();
 	bool movementValidation(GameMove& gameMove, HadarNofarSoldier* sol);
